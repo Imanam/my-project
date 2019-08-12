@@ -1,58 +1,132 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="grey lighten-5 pa-4">
+    <v-alert
+      v-model="show"
+      v-bind="localAttrs"
+      :dismissible="dismissible"
+      :type="type"
+      class="mb-4"
+    >
+      This is a {{ type }} alert.
+    </v-alert>
+    <div class="text-center">
+      <v-btn
+        v-if="!show"
+        color="primary"
+        height="56"
+        @click="show = true"
+      >
+        Toggle
+      </v-btn>
+    </div>
+    <v-layout
+      align-center
+      justify-center
+    >
+      <v-flex
+        xs12
+        md8
+      >
+        <v-select
+          v-model="variant"
+          :items="items"
+          clearable
+          label="Variant"
+        ></v-select>
+        <v-radio-group
+          v-model="type"
+          label="Type"
+          row
+        >
+          <v-radio
+            color="success"
+            label="Success"
+            value="success"
+          ></v-radio>
+          <v-radio
+            color="info"
+            label="Info"
+            value="info"
+          ></v-radio>
+          <v-radio
+            color="warning"
+            label="Warning"
+            value="warning"
+          ></v-radio>
+          <v-radio
+            color="error"
+            label="Error"
+            value="error"
+          ></v-radio>
+        </v-radio-group>
+        <template v-if="variant === 'border'">
+          <v-radio-group
+            v-model="border"
+            label="Border Location"
+            row
+          >
+            <v-radio
+              label="Top"
+              value="top"
+            ></v-radio>
+            <v-radio
+              label="Right"
+              value="right"
+            ></v-radio>
+            <v-radio
+              label="Bottom"
+              value="bottom"
+            ></v-radio>
+            <v-radio
+              label="Left"
+              value="left"
+            ></v-radio>
+          </v-radio-group>
+          <v-checkbox
+            v-model="coloredBorder"
+            hide-details
+            label="Colored Border"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="dismissible"
+            hide-details
+            label="Dismissible"
+          ></v-checkbox>
+        </template>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
-
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
+  export default {
+    data: () => ({
+      border: 'left',
+      coloredBorder: false,
+      dismissible: false,
+      items: [
+        'border',
+        'outlined',
+        'dense',
+        'prominent',
+      ],
+      show: true,
+      type: 'success',
+      variant: null,
+    }),
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+    computed: {
+      localAttrs () {
+        const attrs = {}
+
+        if (this.variant === 'border') {
+          attrs.border = this.border
+          attrs.coloredBorder = this.coloredBorder
+        } else {
+          attrs[this.variant] = true
+        }
+
+        return attrs
+      },
+    },
+  }
+</script>
