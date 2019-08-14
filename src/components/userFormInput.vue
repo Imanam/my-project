@@ -1,12 +1,15 @@
 <template>
   <v-container text-center>
-      <div>
-        <v-alert type=this.alert_type>
-          this.alert_msg
-        </v-alert>
-      </div>
     <v-layout>
       <v-flex xs8 offset-xs1>
+        <v-snackbar
+          v-model="alert_show"
+          :color="alert_type"
+          :timeout="2000"
+          top="top"
+        >
+          {{ alert_msg }}
+        </v-snackbar>
       <form @submit.prevent="onSubmit">
         <v-text-field
           v-model="userName"
@@ -65,8 +68,10 @@
       email: '',
       password: '',
       show: false,
-      alert_msg: '',
-      alert_type: '',
+      alert_msg: 'Placeholder for alert',
+      alert_dismissible: true,
+      alert_show: false,
+      alert_type: 'error',
     }),
 
     computed: {
@@ -124,9 +129,9 @@
       check_response (response) {
         if (response.status === 200) {
           // analyze message returned by php code
-          const msg_values = Object.values(response.data);
-          this.alert_msg = msg_values[0]['msg'];
-          this.alert_type = msg_values[0]['code'];
+          this.alert_msg = response.data['msg'];
+          this.alert_type = response.data['code'];
+          this.alert_show = true;
           this.$root.$emit('reload_user_data');
         }
         console.log(this.alert_msg);

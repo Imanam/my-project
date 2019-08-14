@@ -2,34 +2,49 @@
   <v-container text-center>
     <v-layout>
       <v-flex xs8 offset-xs1>
-      <form @submit.prevent="onSubmit">
-        <v-text-field
-          v-model="applicationName"
-          :error-messages="applicationNameErrors"
-          :counter="50"
-          label="Application name"
-          required
-          @input="$v.applicationName.$touch()"
-          @blur="$v.applicationName.$touch()"
-        ></v-text-field>
-        <v-text-field
-          v-model="applicationDescription"
-          label="Description"
-          @input="$v.applicationDescription.$touch()"
-          @blur="$v.applicationDescription.$touch()"
-        ></v-text-field>
-        <v-text-field
-          v-model="applicationCategory"
-          :error-messages="applicationCategoryErrors"
-          :counter="10"
-          label="Category"
-          required
-          @input="$v.applicationCategory.$touch()"
-          @blur="$v.applicationCategory.$touch()"
-        ></v-text-field>
-        <v-btn @click="submit">submit</v-btn>
-        <v-btn @click="clear">clear</v-btn>
-      </form>
+        <v-snackbar
+          v-model="alert_show"
+          :color="alert_type"
+          :timeout="2000"
+          top="top"
+        >
+          {{ alert_msg }}
+        </v-snackbar>
+        <form @submit.prevent="onSubmit">
+          <v-text-field
+            v-model="applicationName"
+            :error-messages="applicationNameErrors"
+            :counter="50"
+            label="Application name"
+            required
+            @input="$v.applicationName.$touch()"
+            @blur="$v.applicationName.$touch()"
+          ></v-text-field>
+          <v-text-field
+            v-model="applicationDescription"
+            label="Description"
+          ></v-text-field>
+          <v-text-field
+            v-model="applicationCategory"
+            :error-messages="applicationCategoryErrors"
+            :counter="10"
+            label="Category"
+            required
+            @input="$v.applicationCategory.$touch()"
+            @blur="$v.applicationCategory.$touch()"
+          ></v-text-field>
+          <v-combobox
+            v-model="select"
+            :items="comboboxItems"
+            :error-messages="applicationCategoryErrors"
+            :counter="15"
+            label="Category"
+            @input="$v.applicationCategory.$touch()"
+            @blur="$v.applicationCategory.$touch()"
+          ></v-combobox>
+          <v-btn @click="submit">submit</v-btn>
+          <v-btn @click="clear">clear</v-btn>
+        </form>
       </v-flex>
     </v-layout>
   </v-container>
@@ -51,7 +66,13 @@
     data: () => ({
       applicationName: '',
       applicationCategory: '',
-      applicationDescription: ''
+      applicationDescription: '',
+      alert_msg: 'Placeholder for alert',
+      alert_dismissible: true,
+      alert_show: false,
+      alert_type: 'error',
+      select: '',
+      comboboxItems: [],
     }),
 
     computed: {
@@ -70,7 +91,9 @@
         return errors
       }
     },
-
+    mounted () {
+      this.get_category();
+    },
     methods: {
       submit () {
         this.$v.$touch()
@@ -96,10 +119,28 @@
         this.applicationDescription = ''
       },
 
+      get_category : function () {
+          axios
+            .get('api/application.php')
+            .then(response => {
+                const values = Object.values(response.data)
+                const items = [];
+                values.forEach((value) => {
+                    items.push(value.name)
+                });
+                this.comboboxItems = items;
+            })
+      },
+
       check_response (response) {
         if (response.status === 200) {
-          this.$root.$emit('reload_app_data');
+          // analyze message returned by php code
+          this.alert_msg = response.data['msg'];
+          this.alert_type = response.data['code'];
+          this.alert_show = true;
+          this.$root.$emit('reload_user_data');
         }
+        console.log(this.alert_msg);
       }
     }
   }

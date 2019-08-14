@@ -20,12 +20,24 @@ try {
     $desc = $data['applicationDescription'];
     $category = $data['applicationCategory'];
     
-    $sql = "INSERT INTO applications (name, description, category) VALUES ('$name', '$desc', '$category')";
-    $conn->exec($sql);
-    echo "New application created successfully";
+    // check if the application exists
+    $sql_check_application = "SELECT COUNT(*) FROM applications WHERE name = '$name'";
+    $sql_insert_application = "INSERT INTO applications (name, description, category) VALUES ('$name', '$desc', '$category')";
+
+    $res_check = $conn->query($sql_check_application);
+    if ($res_check->fetchColumn() > 0) {
+        // application with same name, description already exists. We refuse to re-create it
+        $return = array("msg" => "Application already exists", "code" => "error");
+    }
+    else {
+        // use exec() because no results are returned
+        $conn->exec($sql_insert_application);
+        $return = array("msg" => "Application has been created", "code" => "success");
+    }
+    echo(json_encode($return));
 }
 catch(PDOException $e) {
-    echo $sql . "<br>" . $e->getMessage();
+    exit('Failed to connect to database.' . $e->getMessage());
 }
 
 $conn = null;

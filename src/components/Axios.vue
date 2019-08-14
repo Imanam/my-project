@@ -3,11 +3,7 @@
     <div class="container">
         <div class="card-columns">
 
-<<<<<<< HEAD
           <div class="card p-3" v-for="(object, key, id) in tsvMap" v-bind:key="id">
-=======
-          <div class="card p-3" v-for="(object, id) in tsvMap" v-bind:key="id">
->>>>>>> origin/master
 
             <blockquote class="card-blockquote">
               <p>
@@ -15,11 +11,7 @@
               </p>
               <footer>
                 <small>
-<<<<<<< HEAD
                     <a target="_blank" :href="object.Group">{{ object.Group }}</a>
-=======
-                    <a target="_blank" :href="object.Group">Read more on {{ object.Group }}</a>
->>>>>>> origin/master
 
                 </small>
               </footer>
@@ -39,10 +31,7 @@
 
 
 <script>
-<<<<<<< HEAD
 export let tsvMap = {};
-=======
->>>>>>> origin/master
 import axios from "axios";
 
 export default {
@@ -54,17 +43,10 @@ export default {
 
   data() {
     return {
-<<<<<<< HEAD
       // tsvMap:{},
       postsLoading: false,
       nextPage: null,
       tsvMap : [tsvMap]
-=======
-      // object: {},
-      tsvMap:{},
-      postsLoading: false,
-      nextPage: null
->>>>>>> origin/master
     };
   },
 
@@ -106,7 +88,6 @@ export default {
               }
 
             }
-<<<<<<< HEAD
             // tsvMap[indexOfDictionary] = object;
 
             this.tsvMap[indexOfDictionary] = object;
@@ -119,14 +100,6 @@ export default {
           }
           // return tsvMap; 
 
-=======
-            this.tsvMap[indexOfDictionary] = object;
-            // eslint-disable-next-line
-            console.log(this.tsvMap);
-            // this.result.push(this.object);
-            object = {};
-          }
->>>>>>> origin/master
           return this.tsvMap; 
         })
 

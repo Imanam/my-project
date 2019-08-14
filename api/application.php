@@ -5,7 +5,8 @@ $db_user = 'root';
 $db_pass = 'root';
 
 // query to get all existing apps
-$sql = 'SELECT name, description, category from applications';
+$sql = 'SELECT a.name \'name\', a.description, c.name \'CatName\'from applications a INNER JOIN categories c ON c.id_category = a.id_category';
+
 
 $json_result = [];
 
@@ -18,7 +19,7 @@ try {
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
     $json_result = json_encode($results);
 } catch (PDOException $e) {
-    exit('データベース接続失敗。' . $e->getMessage());
+    exit('Failed to connect to database.' . $e->getMessage());
 }
 echo($json_result);
 

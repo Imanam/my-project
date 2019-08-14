@@ -60,7 +60,7 @@ export default {
                 //console.log(values);
                 const items = [];
                 values.forEach((value) => {
-                    console.log(value);
+                    //console.log(value);
                     const item = {
                         name : value.UserName,
                         email : value.Email,
@@ -70,7 +70,7 @@ export default {
                     items.push(item)
                 });
                 this.items = items;
-                console.log(this.items);
+                //console.log(this.items);
             })
     },
   }

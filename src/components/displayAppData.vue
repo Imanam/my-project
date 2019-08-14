@@ -58,13 +58,14 @@ export default {
             .get('api/application.php')
             .then(response => {
                 const values = Object.values(response.data)
+                console.log(values);
                 const items = [];
                 values.forEach((value) => {
                     console.log(value);
                     const item = {
                         name : value.name,
                         description : value.description,
-                        category : value.category,
+                        category : value.CatName,
                     } ;
                     items.push(item)
                 });

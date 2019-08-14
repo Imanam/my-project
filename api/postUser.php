@@ -11,7 +11,7 @@ $dsn = 'mysql:host=localhost;dbname=my_project';
 $db_user = 'root';
 $db_pass = 'root';
 
-$return->msg = '';
+$return = array('msg' => 'Error - User already exists', 'code' => 'error');
 
 try {
     $conn = new PDO($dsn, $db_user, $db_pass);
@@ -28,20 +28,17 @@ try {
     $res_check = $conn->query($sql_check_user);
     if ($res_check->fetchColumn() > 0) {
         // user with same name and mail already exists. We refuse to re-create it
-        $return->code = 'error';
-        $return->msg = 'Error - User already exists';
+        $return = array("msg" => "User already exists", "code" => "error");
     }
     else {
         // use exec() because no results are returned
         $conn->exec($sql_insert_user);
-        $return->code = 'success';
-        $return->msg = 'Success - User has been created';
+        $return = array("msg" => "User has been created", "code" => "success");
     }
     echo(json_encode($return));
-
 }
 catch(PDOException $e) {
-    echo "<br>" . $e->getMessage();
+    exit('Failed to connect to database.' . $e->getMessage());
 }
 
 $conn = null;

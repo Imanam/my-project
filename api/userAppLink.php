@@ -18,7 +18,7 @@ try {
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
     $json_result = json_encode($results);
 } catch (PDOException $e) {
-    exit('データベース接続失敗。' . $e->getMessage());
+    exit('Failed to connect to database.' . $e->getMessage());
 }
 echo($json_result);
 

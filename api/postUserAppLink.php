@@ -37,6 +37,7 @@ try {
     // get user id from name and e-mail
     $user_id_stmt = $pdo->prepare($sql_get_user_id);
     $user_id_stmt->execute();
+    // check if user is unique
     $colcount = $user_id_stmt->columnCount();
     var_dump($colcount);
     if ($colcount === 1) {
@@ -50,6 +51,7 @@ try {
     // get application id from application name
     $app_id_stmt = $pdo->prepare($sql_get_app_id);
     $app_id_stmt->execute();
+    // check if application is unique
     $colcount = $app_id_stmt->columnCount();
     var_dump($colcount);
     if ($colcount === 1) {
@@ -63,6 +65,7 @@ try {
     // get role id from role name
     $role_id_stmt = $pdo->prepare($sql_get_role_id);
     $role_id_stmt->execute();
+    // check if role is unique
     $colcount = $role_id_stmt->columnCount();
     var_dump($colcount);
     if ($colcount === 1) {
@@ -91,7 +94,7 @@ try {
         $statement->execute();    
     }
 } catch (PDOException $e) {
-    exit('データベース接続失敗。' . $e->getMessage());
+    exit('Failed to connect to database.' . $e->getMessage());
 }
 
 $method = $_SERVER['REQUEST_METHOD'];

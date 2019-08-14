@@ -57,7 +57,7 @@
         axios.post('api/postUserAppLink.php', {
           userName: this.user,
           appName: this.application,
-          role: this.role
+          role: this.Role
         })
         .then((response) => {
           this.check_response(response)})
